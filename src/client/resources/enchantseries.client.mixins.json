@@ -1,0 +1,24 @@
+{
+	"required": true,
+	"package": "com.soybean.mixin.client",
+	"compatibilityLevel": "JAVA_17",
+	"client": [
+		"ExampleClientMixin",
+      	"PlayerEntityMixin",
+		"EntityMixin",
+		"EnderPearlEntityMixin",
+		"FlintAndSteelItemMixin",
+		"FrostWalkerEnchantmentMixin",
+		"LivingEntityMixin",
+		"BoatEntityMixin",
+		"ItemEntityMixin",
+		"PersistentProjectileEntityMixin",
+		"BlockMixin",
+		"ClientPlayerEntityMixin",
+		"BowItemMixin",
+		"CrossbowItemMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

@@ -1,0 +1,90 @@
+{
+  "multipart": [
+    {
+      "apply": [
+        {
+          "model": "enchantseries:block/amaterasu_floor0"
+        },
+        {
+          "model": "enchantseries:block/amaterasu_floor1"
+        }
+      ]
+    },
+    {
+      "apply": [
+        {
+          "model": "enchantseries:block/amaterasu_side0"
+        },
+        {
+          "model": "enchantseries:block/amaterasu_side1"
+        },
+        {
+          "model": "enchantseries:block/amaterasu_side_alt0"
+        },
+        {
+          "model": "enchantseries:block/amaterasu_side_alt1"
+        }
+      ]
+    },
+    {
+      "apply": [
+        {
+          "model": "enchantseries:block/amaterasu_side0",
+          "y": 90
+        },
+        {
+          "model": "enchantseries:block/amaterasu_side1",
+          "y": 90
+        },
+        {
+          "model": "enchantseries:block/amaterasu_side_alt0",
+          "y": 90
+        },
+        {
+          "model": "enchantseries:block/amaterasu_side_alt1",
+          "y": 90
+        }
+      ]
+    },
+    {
+      "apply": [
+        {
+          "model": "enchantseries:block/amaterasu_side0",
+          "y": 180
+        },
+        {
+          "model": "enchantseries:block/amaterasu_side1",
+          "y": 180
+        },
+        {
+          "model": "enchantseries:block/amaterasu_side_alt0",
+          "y": 180
+        },
+        {
+          "model": "enchantseries:block/amaterasu_side_alt1",
+          "y": 180
+        }
+      ]
+    },
+    {
+      "apply": [
+        {
+          "model": "enchantseries:block/amaterasu_side0",
+          "y": 270
+        },
+        {
+          "model": "enchantseries:block/amaterasu_side1",
+          "y": 270
+        },
+        {
+          "model": "enchantseries:block/amaterasu_side_alt0",
+          "y": 270
+        },
+        {
+          "model": "enchantseries:block/amaterasu_side_alt1",
+          "y": 270
+        }
+      ]
+    }
+  ]
+}
