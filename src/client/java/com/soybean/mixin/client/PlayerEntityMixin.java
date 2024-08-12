@@ -158,6 +158,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo info) {
+        this.isJump = true;
         PlayerEntity player = (PlayerEntity) (Object) this;
         //爆破行者
         World world = player.getWorld();
@@ -200,6 +201,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             if (doubleJumpCooldown > 0) {
                 doubleJumpCooldown--;
             }
+            LOGGER.info("canDoubleJump={}, doubleJumpCooldown={}, jump={}", canDoubleJump, doubleJumpCooldown, jump);
             if (canDoubleJump && doubleJumpCooldown == 0 && jump) {
                 Vec3d velocity = player.getVelocity();
                 if (velocity.y < 0.2) { // Player is falling and not immediately after a jump

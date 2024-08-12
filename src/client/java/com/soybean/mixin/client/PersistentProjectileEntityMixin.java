@@ -80,6 +80,7 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
                 if (player instanceof ServerPlayerEntity serverPlayer) {
                     serverPlayer.interactionManager.tryBreakBlock(blockPos);
                 }
+                this.discard();
             }
             Direction side = blockHitResult.getSide();
             BlockPos offsetBlockPos = blockPos.offset(side);
@@ -96,6 +97,7 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
                         }
                     }
                 }
+                this.discard();
             }
             //爆破附魔
             if(EnchantmentHelper.getLevel(EnchantseriesClient.EXPLOSIVE_ENCHANTMENT, mainHandStack) > 0){
@@ -111,8 +113,10 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
 //                        lightningEntity.refreshPositionAndAngles(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0.0F, 0.0F);
 //                        this.getWorld().spawnEntity(lightningEntity);
 //                    }
-                this.discard();
+
             }
+            this.discard();
         }
+
     }
 }
