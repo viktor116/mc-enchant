@@ -180,7 +180,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                 float pushStrength = 1.0F + (level * 0.1F); // 推动玩家的力度，可以调整
                 double motionX = -Math.sin(player.getYaw() * (Math.PI / 180.0)) * pushStrength * 2;
                 double motionZ = Math.cos(player.getYaw() * (Math.PI / 180.0)) * pushStrength * 2;
-                player.addVelocity(motionX, level * 0.1F, motionZ);
+                player.addVelocity(motionX, level * 0.3F, motionZ);
                 player.velocityModified = true;
                 MinecraftServer server = world.getServer();
                 if (server != null) {

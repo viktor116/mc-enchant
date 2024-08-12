@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +21,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
+import net.minecraft.world.explosion.ExplosionBehavior;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixin;
@@ -99,7 +101,10 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
             if(EnchantmentHelper.getLevel(EnchantseriesClient.EXPLOSIVE_ENCHANTMENT, mainHandStack) > 0){
                 int level = EnchantmentHelper.getLevel(EnchantseriesClient.EXPLOSIVE_ENCHANTMENT, mainHandStack);
                 float explosionPower = 3.0F * level;
-                this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), explosionPower,false, World.ExplosionSourceType.BLOCK);
+//                Explosion explosion = new Explosion(world, null, blockPos.getX()+0.5, blockPos.getY(), blockPos.getZ()+ 0.5, explosionPower, false, Explosion.DestructionType.TRIGGER_BLOCK);
+//                explosion.collectBlocksAndDamageEntities();
+//                explosion.affectWorld(true);
+                this.getWorld().createExplosion(owner, entity.getX()+0.5, entity.getY(), entity.getZ()+0.5, explosionPower,false, World.ExplosionSourceType.BLOCK);
 //                    // 生成雷电
 //                    LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(this.getWorld());
 //                    if (lightningEntity != null) {

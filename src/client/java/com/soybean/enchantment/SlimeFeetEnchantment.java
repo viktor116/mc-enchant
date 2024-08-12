@@ -40,6 +40,8 @@ public class SlimeFeetEnchantment extends Enchantment {
     }
 
     private static final Map<UUID, Double> playerFallSpeeds = new HashMap<>();
+    private static final Map<UUID, Double> bounceStrengths = new HashMap<>();
+    private static final double MIN_FALL_DISTANCE_FOR_BOUNCE = 3.0;
 
     public static void registerEvents() {
         ServerTickEvents.START_SERVER_TICK.register(server -> {
@@ -61,10 +63,11 @@ public class SlimeFeetEnchantment extends Enchantment {
         BlockPos pos = player.getBlockPos().down();
         BlockState state = player.getWorld().getBlockState(pos);
         UUID playerId = player.getUuid();
+        double d = Math.abs(velocity.y);
 
-        // If player is falling, store their fall speed
-        if (!player.isOnGround() && velocity.y < 0) {
+        if (!player.isOnGround() && velocity.y < 0 && d > 0.1) {
             playerFallSpeeds.put(playerId, Math.min(velocity.y, playerFallSpeeds.getOrDefault(playerId, 0.0)));
+            LOGGER.info("play velocity.y: {}", velocity.y);
             return;
         }
 
@@ -72,13 +75,19 @@ public class SlimeFeetEnchantment extends Enchantment {
         if (player.isOnGround() && !(state.getBlock() instanceof SlimeBlock) && playerFallSpeeds.containsKey(playerId)) {
             double fallSpeed = playerFallSpeeds.get(playerId);
 
-            if (fallSpeed < -0.1) {
-                double bounceStrength = -fallSpeed * 0.8;
+            // Reduce bounce strength for each subsequent bounce
+            double bounceStrength = bounceStrengths.getOrDefault(playerId, -fallSpeed * 0.8);
+
+            if (bounceStrength > 0.1 && fallSpeed < -0.5) {  // Only bounce if strength is significant
                 player.setVelocity(velocity.x, bounceStrength, velocity.z);
                 player.velocityModified = true;
                 player.fallDistance = 0f;
 
-//                LOGGER.info("Slime feet effect applied. Fall speed: " + fallSpeed + ", New velocity: " + player.getVelocity());
+                // Reduce the bounce strength for the next bounce
+                bounceStrengths.put(playerId, bounceStrength * 0.6);  // Reduce bounce strength by 40% each time
+            } else {
+                // Clear the stored values when bounce strength is too low
+                bounceStrengths.remove(playerId);
             }
 
             // Clear the stored fall speed
