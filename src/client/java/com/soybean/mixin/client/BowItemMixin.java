@@ -2,6 +2,7 @@ package com.soybean.mixin.client;
 
 import com.soybean.EnchantseriesClient;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -154,6 +155,32 @@ public abstract class BowItemMixin {
                     }
                     playerEntity.incrementStat(Stats.USED.getOrCreateStat(thisItem));
                 }
+            }
+        }else {
+            if (!world.isClient) {
+                ItemStack arrowStack = new ItemStack(Items.ARROW);
+                ArrowItem arrowItem = new ArrowItem(new FabricItemSettings());
+                PersistentProjectileEntity persistentProjectileEntity = arrowItem.createArrow(world,arrowStack,user);
+                persistentProjectileEntity.setVelocity(user, user.getPitch(), user.getYaw(), 0.0F, 3.0F, 1.0F);
+                int j = EnchantmentHelper.getLevel(Enchantments.POWER, stack);
+                if (j > 0) {
+                    persistentProjectileEntity.setDamage(persistentProjectileEntity.getDamage() + (double) j * 0.5 + 0.5);
+                }
+
+                int k = EnchantmentHelper.getLevel(Enchantments.PUNCH, stack);
+                if (k > 0) {
+                    persistentProjectileEntity.setPunch(k);
+                }
+
+                if (EnchantmentHelper.getLevel(Enchantments.FLAME, stack) > 0) {
+                    persistentProjectileEntity.setOnFireFor(100);
+                }
+
+                stack.damage(1, user, (p) -> {
+                    p.sendToolBreakStatus(user.getActiveHand());
+                });
+
+                world.spawnEntity(persistentProjectileEntity);
             }
         }
     }

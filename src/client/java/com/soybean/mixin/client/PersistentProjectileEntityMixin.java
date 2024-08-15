@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -69,7 +70,7 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
     protected void onBlockHit(BlockHitResult blockHitResult, CallbackInfo ci) {
         PersistentProjectileEntity entity= (PersistentProjectileEntity)(Object) this;
         Entity owner = entity.getOwner();
-        if(owner instanceof PlayerEntity player){
+        if(owner instanceof LivingEntity player){
             ItemStack mainHandStack = player.getMainHandStack();
             ItemStack offHandStack = player.getOffHandStack();
             BlockPos blockPos = blockHitResult.getBlockPos();
@@ -90,10 +91,10 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
                     Block block = ((BlockItem) offHandStack.getItem()).getBlock();
                     world.setBlockState(offsetBlockPos, block.getDefaultState());
                     // 减少副手物品的数量
-                    if(!player.isCreative()){
+                    if (player instanceof PlayerEntity playerEntity) {
                         offHandStack.decrement(1);
                         if (offHandStack.isEmpty()) {
-                            player.getInventory().removeOne(offHandStack);
+                            playerEntity.getInventory().removeOne(offHandStack);
                         }
                     }
                 }
@@ -117,6 +118,21 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
             }
             this.discard();
         }
+    }
 
+    @Inject(method = "onEntityHit", at = @At("HEAD"))
+    protected void onBlockHit(EntityHitResult entityHitResult, CallbackInfo ci) {
+        PersistentProjectileEntity entity= (PersistentProjectileEntity)(Object) this;
+        Entity owner = entity.getOwner();
+        if(owner instanceof LivingEntity player){
+            ItemStack mainHandStack = player.getMainHandStack();
+            //爆破附魔
+            if(EnchantmentHelper.getLevel(EnchantseriesClient.EXPLOSIVE_ENCHANTMENT, mainHandStack) > 0){
+                int level = EnchantmentHelper.getLevel(EnchantseriesClient.EXPLOSIVE_ENCHANTMENT, mainHandStack);
+                float explosionPower = 3.0F * level;
+                this.getWorld().createExplosion(owner, entity.getX()+0.5, entity.getY(), entity.getZ()+0.5, explosionPower,false, World.ExplosionSourceType.BLOCK);
+            }
+            this.discard();
+        }
     }
 }

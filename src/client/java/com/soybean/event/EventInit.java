@@ -164,5 +164,7 @@ public class EventInit {
         DiscountEnchantment.registerEvents();
         //弹弹行者
         SlimeFeetEnchantment.registerEvents();
+        //炎霜行者
+        FlameFrostWalkerEnchantment.registerEvents();
     }
 }

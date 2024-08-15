@@ -251,5 +251,4 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             cir.cancel();
         }
     }
-
 }

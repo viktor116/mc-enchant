@@ -45,7 +45,7 @@ public class ToFriendEnchantment extends Enchantment {
                 if (attacker instanceof MobEntity mob) { // 检查 user 是否为 MobEntity
                     if (attacker.isAttackable() && attacker.isLiving()) {
                         List<LivingEntity> nearbyHostiles = attacker.getWorld().getNonSpectatingEntities(LivingEntity.class,
-                                attacker.getBoundingBox().expand(7, 5, 7));
+                                attacker.getBoundingBox().expand(9, 5, 9));
                         for (LivingEntity target : nearbyHostiles) {
                             if (target != attacker && target != user) {
                                 mob.setTarget(target); // 使用已经转换好的 mobUser

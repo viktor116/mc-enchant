@@ -1,10 +1,7 @@
 package com.soybean.mixin.client;
 
 import com.soybean.EnchantseriesClient;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CropBlock;
-import net.minecraft.block.SaplingBlock;
+import net.minecraft.block.*;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,6 +16,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * @author soybean
@@ -45,5 +43,11 @@ public abstract class BlockMixin {
                 }
             }
         }
+    }
+
+    @Inject(at = @At("RETURN"), method = "getSlipperiness", cancellable = true)
+    public void getSlipperiness(CallbackInfoReturnable<Float> callback) {
+        LOGGER.info("back ice slipperiness");
+        callback.setReturnValue(Blocks.ICE.getSlipperiness());
     }
 }
