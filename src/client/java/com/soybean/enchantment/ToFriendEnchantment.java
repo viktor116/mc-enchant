@@ -41,7 +41,7 @@ public class ToFriendEnchantment extends Enchantment {
             List<ItemStack> playerInventory = CommonUtils.getPlayerInventory(player);
             ItemStack hand = playerInventory.get(CommonUtils.MAIN_HAND);
             if (EnchantmentHelper.getLevel(EnchantseriesClient.TO_FRIEND_ENCHANTMENT, hand) > 0) {
-                LOGGER.info("user={},attacter={}", user.getClass().getName(), attacker.getClass().getName());
+//                LOGGER.info("user={},attacter={}", user.getClass().getName(), attacker.getClass().getName());
                 if (attacker instanceof MobEntity mob) { // 检查 user 是否为 MobEntity
                     if (attacker.isAttackable() && attacker.isLiving()) {
                         List<LivingEntity> nearbyHostiles = attacker.getWorld().getNonSpectatingEntities(LivingEntity.class,

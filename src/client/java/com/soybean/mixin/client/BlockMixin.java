@@ -47,7 +47,7 @@ public abstract class BlockMixin {
 
     @Inject(at = @At("RETURN"), method = "getSlipperiness", cancellable = true)
     public void getSlipperiness(CallbackInfoReturnable<Float> callback) {
-        LOGGER.info("back ice slipperiness");
-        callback.setReturnValue(Blocks.ICE.getSlipperiness());
+//        LOGGER.info("back ice slipperiness");
+//        callback.setReturnValue(Blocks.ICE.getSlipperiness());
     }
 }
