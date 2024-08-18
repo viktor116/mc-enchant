@@ -7,6 +7,7 @@ import com.soybean.damage.FengdanDamage;
 import com.soybean.enchantment.*;
 import com.soybean.mixin.client.BowItemMixin;
 import com.soybean.networks.ServerNetworking;
+import com.soybean.scheduler.TickSchedulerFake;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
@@ -69,9 +70,13 @@ public class EventInit {
                 ItemStack leg = player.getInventory().getArmorStack(1);
                 ItemStack chest = player.getInventory().getArmorStack(2);
                 ItemStack head = player.getInventory().getArmorStack(3);
-                // 检查靴子是否有特定的附魔
+                // 检查靴子是否有特定的附魔 火焰行者
                 if (EnchantmentHelper.getLevel(EnchantseriesClient.FIRE_SHOE, boots) > 0) {
                     FireShoe.freezeLava(player, player.getWorld(), player.getBlockPos(), EnchantmentHelper.getLevel(EnchantseriesClient.FIRE_SHOE, boots));
+                }
+                // 炎霜行者
+                if (EnchantmentHelper.getLevel(EnchantseriesClient.FLAME_FROST_WALKER_ENCHANTMENT,boots)>0){
+                    FlameFrostWalkerEnchantment.freezeLava(player, player.getWorld(), player.getBlockPos(), EnchantmentHelper.getLevel(EnchantseriesClient.FLAME_FROST_WALKER_ENCHANTMENT, boots));
                 }
                 if(EnchantmentHelper.getLevel(EnchantseriesClient.WATER_WALKER_ENCHANTMENT,boots)>0){
                     WaterWalker.walkLand(player, player.getWorld(), player.getBlockPos(), EnchantmentHelper.getLevel(EnchantseriesClient.WATER_WALKER_ENCHANTMENT, boots));
@@ -155,7 +160,8 @@ public class EventInit {
                 }
             }
         });
-
+        //注册炎霜行者
+        ServerTickEvents.END_SERVER_TICK.register(new TickSchedulerFake());
         //画地为牢
         DrawCircleEnchantment.registerListener();
         //蜘蛛之力

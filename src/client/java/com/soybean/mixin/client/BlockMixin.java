@@ -2,7 +2,9 @@ package com.soybean.mixin.client;
 
 import com.soybean.EnchantseriesClient;
 import net.minecraft.block.*;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -45,9 +47,26 @@ public abstract class BlockMixin {
         }
     }
 
-    @Inject(at = @At("RETURN"), method = "getSlipperiness", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "getSlipperiness", cancellable = true)
     public void getSlipperiness(CallbackInfoReturnable<Float> callback) {
-//        LOGGER.info("back ice slipperiness");
-//        callback.setReturnValue(Blocks.ICE.getSlipperiness());
+        Block block = ((Block) (Object) this);
+        // 检查是否为岩浆块
+        if (block.getDefaultState().isOf(Blocks.MAGMA_BLOCK)) {
+            // 获取当前玩家实例
+            MinecraftClient client = MinecraftClient.getInstance();
+            PlayerEntity player = client.player;
+
+            // 如果当前玩家存在并且装备了附有 FlameFrostWalker 附魔的靴子
+            if (player != null && hasFlameFrostWalkerEnchantment(player)) {
+                // 设置岩浆块的滑动系数为冰块的滑动系数
+                callback.setReturnValue(0.98F); // 冰块滑动系数
+            }
+        }
+    }
+
+    // 检查玩家是否穿着附有 FlameFrostWalker 附魔的靴子
+    private boolean hasFlameFrostWalkerEnchantment(PlayerEntity player) {
+        ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
+        return EnchantmentHelper.getLevel(EnchantseriesClient.FLAME_FROST_WALKER_ENCHANTMENT, boots) > 0;
     }
 }

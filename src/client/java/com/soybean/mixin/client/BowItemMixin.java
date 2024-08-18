@@ -98,7 +98,6 @@ public abstract class BowItemMixin {
     private void shoot(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         LOGGER.info("user.name={}",user.getName());
         BowItem thisItem = (BowItem) ((Object) this);
-//        LOGGER.info("start shoot");
         if (user instanceof PlayerEntity playerEntity) {
             boolean bl = playerEntity.getAbilities().creativeMode || EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0;
             ItemStack itemStack = playerEntity.getProjectileType(stack);

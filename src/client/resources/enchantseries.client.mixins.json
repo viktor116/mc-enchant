@@ -16,7 +16,9 @@
 		"BlockMixin",
 		"ClientPlayerEntityMixin",
 		"BowItemMixin",
-		"CrossbowItemMixin"
+		"CrossbowItemMixin",
+		"AbstractSkeletonEntityMixin",
+		"MagmaBlockMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

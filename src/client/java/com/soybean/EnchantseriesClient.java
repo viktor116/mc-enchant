@@ -4,14 +4,11 @@ import com.soybean.block.AmaterasuFireBlock;
 import com.soybean.damage.FengdanDamage;
 import com.soybean.enchantment.*;
 import com.soybean.event.EventInit;
-import com.soybean.networks.ClientInit;
-import com.soybean.registery.Register;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.MapColor;
+import net.minecraft.block.*;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.RenderLayer;
@@ -100,7 +97,6 @@ public class EnchantseriesClient implements ClientModInitializer {
 	public static final AmaterasuFireBlock fire = Registry.register(Registries.BLOCK, new Identifier(MID, "amaterasu"), new AmaterasuFireBlock(AbstractBlock.Settings.create().replaceable().mapColor(MapColor.BLACK).noCollision().breakInstantly().luminance((state) -> {
 		return 10;
 	}).sounds(BlockSoundGroup.WOOL).pistonBehavior(PistonBehavior.DESTROY)));
-
 	public static final KeyBinding JUMP_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 			"key.jump",
 			InputUtil.Type.KEYSYM,
