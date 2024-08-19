@@ -26,8 +26,8 @@ public abstract class ItemEntityMixin {
     @Shadow public abstract void setDespawnImmediately();
 
     //    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/SheepEntity;sheared(Lnet/minecraft/sound/SoundCategory;)V"), method = "interactMob", cancellable = true)
-    @Inject(at = @At(value = "INVOKE",target = "Lnet/minecraft/entity/ItemEntity;applyWaterBuoyancy()V"), method = "tick", cancellable = true)
-    public void tick(CallbackInfo ci) {
+    @Inject(at = @At(value = "INVOKE",target = "Lnet/minecraft/entity/ItemEntity;applyWaterBuoyancy()V"), method = "tick", cancellable = false)
+    public void tickWater(CallbackInfo ci) {
         Entity entity = (Entity)(Object) this;
         NbtCompound nbtCompound = new NbtCompound();
         entity.saveNbt(nbtCompound);
@@ -41,6 +41,14 @@ public abstract class ItemEntityMixin {
             level = enchantmentTag.getInt("lvl");// 获取附魔等级
         }
         if(level != 0 && id.equals("enchantseries:feng_dan")){
+            this.setDespawnImmediately();
+        }
+    }
+
+    @Inject(at = @At(value = "HEAD"), method = "tick", cancellable = false)
+    public void tick(CallbackInfo ci) {
+        ItemEntity entity = (ItemEntity)(Object) this;
+        if(entity.getWorld().isRaining() && entity.getWorld().isSkyVisible(entity.getBlockPos())){
             this.setDespawnImmediately();
         }
     }

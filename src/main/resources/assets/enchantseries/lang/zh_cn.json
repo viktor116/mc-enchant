@@ -32,5 +32,8 @@
   "enchantment.enchantseries.explosive": "爆破",
   "enchantment.enchantseries.flame_frost_walker": "炎霜行者",
   "enchantment.enchantseries.flame_frost_magma_block": "炎霜块",
+  "enchantment.enchantseries.sponge_walker": "海绵行者",
+  "enchantment.enchantseries.lava_sponge_walker": "熔绵行者",
+  "enchantment.enchantseries.arrows_rain": "箭雨",
   "death.attack.fengdanDamage": "%1$s 溶于水中"
 }

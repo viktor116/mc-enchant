@@ -5,46 +5,26 @@ import com.soybean.EnchantseriesClient;
 import com.soybean.Interface.RambleInterface;
 import com.soybean.damage.FengdanDamage;
 import com.soybean.enchantment.*;
-import com.soybean.mixin.client.BowItemMixin;
 import com.soybean.networks.ServerNetworking;
 import com.soybean.scheduler.TickSchedulerFake;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.fabricmc.fabric.api.event.player.UseEntityCallback;
-import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.fabricmc.fabric.api.event.world.WorldTickCallback;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSources;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import static net.fabricmc.fabric.api.event.world.WorldTickCallback.*;
 
@@ -89,7 +69,7 @@ public class EventInit {
                     EnchantmentHelper.getLevel(EnchantseriesClient.FENG_DAN_ENCHANTMENT,leg)>0 ||
                     EnchantmentHelper.getLevel(EnchantseriesClient.FENG_DAN_ENCHANTMENT,chest)>0 ||
                     EnchantmentHelper.getLevel(EnchantseriesClient.FENG_DAN_ENCHANTMENT,head)>0){
-                    if(player.isTouchingWater()){
+                    if(player.isTouchingWater() || (player.getWorld().isRaining() && player.getWorld().isSkyVisible(player.getBlockPos()))){
                         player.damage(FengdanDamage.of(player.getWorld(),FengdanDamage.DAMAGE_TYPE), 1.0F);
                     }
                 }
@@ -109,10 +89,18 @@ public class EventInit {
                             player.getWorld().setBlockState(firePos, EnchantseriesClient.fire.getDefaultState());
                         }
                     }
-                //连射
-//                    if(EnchantmentHelper.getLevel(EnchantseriesClient.CONTINUOUS_FIRE_ENCHANTMENT,player.getMainHandStack())>0 && BowItemMixin.){
-
-//                    }
+                }
+                //海绵行者
+                if(EnchantmentHelper.getLevel(EnchantseriesClient.SPONGE_WALKER_ENCHANTMENT,boots)>0){
+                    if(player.isTouchingWater()){
+                        SpongeWalkerEnchantment.updateWater(player.getWorld(),player.getBlockPos());
+                    }
+                }
+                //熔绵行者
+                if(EnchantmentHelper.getLevel(EnchantseriesClient.LAVA_SPONGE_WALKER_ENCHANTMENT,boots)>0){
+                    if(player.isInLava()){
+                        LavaSpongeWalkerEnchantment.updateLava(player.getWorld(),player.getBlockPos());
+                    }
                 }
             }
         });

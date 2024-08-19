@@ -62,6 +62,9 @@ public class EnchantseriesClient implements ClientModInitializer {
 	public static final Enchantment SNIPER_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "sniper"), new SniperEnchantment());
 	public static final Enchantment EXPLOSIVE_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "explosive"), new ExplosiveEnchantment());
 	public static final Enchantment FLAME_FROST_WALKER_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "flame_frost_walker"), new FlameFrostWalkerEnchantment());
+	public static final Enchantment SPONGE_WALKER_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "sponge_walker"), new SpongeWalkerEnchantment());
+	public static final Enchantment LAVA_SPONGE_WALKER_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "lava_sponge_walker"), new LavaSpongeWalkerEnchantment());
+	public static final Enchantment ARROWS_RAIN_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "arrows_rain"), new ArrowsRainEnchantment());
 	public static final ItemStack FIRE_SHOE_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(FIRE_SHOE, 1));
 	public static final ItemStack TO_FRIEND_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(TO_FRIEND_ENCHANTMENT, 1));
 	public static final ItemStack EXPLOSIVE_COIN_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(EXPLOSIVE_COIN, 1));
@@ -94,6 +97,10 @@ public class EnchantseriesClient implements ClientModInitializer {
 	public static final ItemStack SNIPER_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(SNIPER_ENCHANTMENT, 1));
 	public static final ItemStack EXPLOSIVE_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(EXPLOSIVE_ENCHANTMENT, 1));
 	public static final ItemStack FLAME_FROST_WALKER_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(FLAME_FROST_WALKER_ENCHANTMENT, 1));
+	public static final ItemStack SPONGE_WALKER_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(SPONGE_WALKER_ENCHANTMENT, 1));
+	public static final ItemStack LAVA_SPONGE_WALKER_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(LAVA_SPONGE_WALKER_ENCHANTMENT, 1));
+	public static final ItemStack ARROWS_RAIN_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(ARROWS_RAIN_ENCHANTMENT, 1));
+
 	public static final AmaterasuFireBlock fire = Registry.register(Registries.BLOCK, new Identifier(MID, "amaterasu"), new AmaterasuFireBlock(AbstractBlock.Settings.create().replaceable().mapColor(MapColor.BLACK).noCollision().breakInstantly().luminance((state) -> {
 		return 10;
 	}).sounds(BlockSoundGroup.WOOL).pistonBehavior(PistonBehavior.DESTROY)));
@@ -139,6 +146,9 @@ public class EnchantseriesClient implements ClientModInitializer {
 				entries.add(SNIPER_ENCHANTMENT_BOOK);
 				entries.add(EXPLOSIVE_ENCHANTMENT_BOOK);
 				entries.add(FLAME_FROST_WALKER_ENCHANTMENT_BOOK);
+				entries.add(SPONGE_WALKER_ENCHANTMENT_BOOK);
+				entries.add(LAVA_SPONGE_WALKER_ENCHANTMENT_BOOK);
+				entries.add(ARROWS_RAIN_ENCHANTMENT_BOOK);
 			})
 			.build();
 

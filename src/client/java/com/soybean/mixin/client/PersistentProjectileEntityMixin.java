@@ -1,6 +1,7 @@
 package com.soybean.mixin.client;
 
 import com.soybean.EnchantseriesClient;
+import com.soybean.enchantment.ArrowsRainEnchantment;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
@@ -17,6 +18,7 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -104,9 +106,6 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
             if(EnchantmentHelper.getLevel(EnchantseriesClient.EXPLOSIVE_ENCHANTMENT, mainHandStack) > 0){
                 int level = EnchantmentHelper.getLevel(EnchantseriesClient.EXPLOSIVE_ENCHANTMENT, mainHandStack);
                 float explosionPower = 3.0F * level;
-//                Explosion explosion = new Explosion(world, null, blockPos.getX()+0.5, blockPos.getY(), blockPos.getZ()+ 0.5, explosionPower, false, Explosion.DestructionType.TRIGGER_BLOCK);
-//                explosion.collectBlocksAndDamageEntities();
-//                explosion.affectWorld(true);
                 this.getWorld().createExplosion(owner, entity.getX()+0.5, entity.getY(), entity.getZ()+0.5, explosionPower,false, World.ExplosionSourceType.BLOCK);
 //                    // 生成雷电
 //                    LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(this.getWorld());
@@ -114,14 +113,17 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
 //                        lightningEntity.refreshPositionAndAngles(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0.0F, 0.0F);
 //                        this.getWorld().spawnEntity(lightningEntity);
 //                    }
-
+                this.discard();
             }
-            this.discard();
+            //箭雨
+            if(EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, mainHandStack) > 0){
+                ArrowsRainEnchantment.shootArrowRain(blockHitResult,EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, mainHandStack),player);
+            }
         }
     }
 
     @Inject(method = "onEntityHit", at = @At("HEAD"))
-    protected void onBlockHit(EntityHitResult entityHitResult, CallbackInfo ci) {
+    protected void onEntityHit(EntityHitResult entityHitResult, CallbackInfo ci) {
         PersistentProjectileEntity entity= (PersistentProjectileEntity)(Object) this;
         Entity owner = entity.getOwner();
         if(owner instanceof LivingEntity player){
@@ -132,7 +134,10 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
                 float explosionPower = 3.0F * level;
                 this.getWorld().createExplosion(owner, entity.getX()+0.5, entity.getY(), entity.getZ()+0.5, explosionPower,false, World.ExplosionSourceType.BLOCK);
             }
-            this.discard();
+            //箭雨
+            if(EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, mainHandStack) > 0){
+                ArrowsRainEnchantment.shootArrowRain(entityHitResult,EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, mainHandStack),player);
+            }
         }
     }
 }
