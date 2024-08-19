@@ -1,6 +1,7 @@
 package com.soybean.enchantment;
 
 import com.soybean.EnchantseriesClient;
+import com.soybean.utils.CommonUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
@@ -8,6 +9,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ArrowItem;
@@ -39,17 +41,20 @@ public class ArrowsRainEnchantment extends Enchantment {
         return 8;
     }
 
-    public static void shootArrowRain(HitResult hitResult, int level, Entity user)  {
+    public static void shootArrowRain(HitResult hitResult, int level, Entity entity)  {
         //todo 箭雨需要更新
         float f = 1.0F;
+        double radius = Math.min(16,level * 2 + 1);
         Vec3d pos = hitResult.getPos();
         ItemStack stack = new ItemStack(Items.ARROW);
-        World world = user.getWorld();
+        World world = entity.getWorld();
         if (!((double) f < 0.1)) {
-            if (!world.isClient) {
+            if (!world.isClient && entity instanceof LivingEntity user) {
                 ArrowItem arrowItem = (ArrowItem) Items.ARROW;
-                PersistentProjectileEntity persistentProjectileEntity = arrowItem.createArrow(world, stack, null);
-                persistentProjectileEntity.setVelocity(pos.getX(),pos.getY()+20,pos.getZ(), f * 3.0F, 0);
+                double offsetX = Math.cos(CommonUtils.RANDOM.nextDouble()  * Math.PI * 2) * radius;
+                double offsetZ = Math.sin(CommonUtils.RANDOM.nextDouble()  * Math.PI * 2) * radius;
+                PersistentProjectileEntity persistentProjectileEntity = arrowItem.createArrow(world, stack, (LivingEntity) user);
+                persistentProjectileEntity.setVelocity(pos.getX()+offsetX,pos.getY() + 20,pos.getZ()+offsetZ, f * 3.0F, 0);
                 if (f == 1.0F) {
                     persistentProjectileEntity.setCritical(true);
                 }
@@ -70,7 +75,7 @@ public class ArrowsRainEnchantment extends Enchantment {
 
                 world.spawnEntity(persistentProjectileEntity);
             }
-            world.playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (world.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+            world.playSound((PlayerEntity) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (world.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
         }
 
 
