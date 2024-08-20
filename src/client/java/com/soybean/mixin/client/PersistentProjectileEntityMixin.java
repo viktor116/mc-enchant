@@ -77,47 +77,49 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
             ItemStack offHandStack = player.getOffHandStack();
             BlockPos blockPos = blockHitResult.getBlockPos();
             World world = entity.getWorld();
-            //破坏附魔
-            if(EnchantmentHelper.getLevel(EnchantseriesClient.DESTRUCT_ENCHANTMENT, mainHandStack) > 0){
+            if(!world.isClient){
+                //破坏附魔
+                if(EnchantmentHelper.getLevel(EnchantseriesClient.DESTRUCT_ENCHANTMENT, mainHandStack) > 0){
 //                world.breakBlock(blockPos,true,player);
-                if (player instanceof ServerPlayerEntity serverPlayer) {
-                    serverPlayer.interactionManager.tryBreakBlock(blockPos);
+                    if (player instanceof ServerPlayerEntity serverPlayer) {
+                        serverPlayer.interactionManager.tryBreakBlock(blockPos);
+                    }
+                    this.discard();
                 }
-                this.discard();
-            }
-            Direction side = blockHitResult.getSide();
-            BlockPos offsetBlockPos = blockPos.offset(side);
-            //建造附魔
-            if(EnchantmentHelper.getLevel(EnchantseriesClient.STRUCT_ENCHANTMENT, mainHandStack) > 0){
-                if (offHandStack.getItem() instanceof BlockItem) {
-                    Block block = ((BlockItem) offHandStack.getItem()).getBlock();
-                    world.setBlockState(offsetBlockPos, block.getDefaultState());
-                    // 减少副手物品的数量
-                    if (player instanceof PlayerEntity playerEntity) {
-                        offHandStack.decrement(1);
-                        if (offHandStack.isEmpty()) {
-                            playerEntity.getInventory().removeOne(offHandStack);
+                Direction side = blockHitResult.getSide();
+                BlockPos offsetBlockPos = blockPos.offset(side);
+                //建造附魔
+                if(EnchantmentHelper.getLevel(EnchantseriesClient.STRUCT_ENCHANTMENT, mainHandStack) > 0){
+                    if (offHandStack.getItem() instanceof BlockItem) {
+                        Block block = ((BlockItem) offHandStack.getItem()).getBlock();
+                        world.setBlockState(offsetBlockPos, block.getDefaultState());
+                        // 减少副手物品的数量
+                        if (player instanceof PlayerEntity playerEntity) {
+                            offHandStack.decrement(1);
+                            if (offHandStack.isEmpty()) {
+                                playerEntity.getInventory().removeOne(offHandStack);
+                            }
                         }
                     }
+                    this.discard();
                 }
-                this.discard();
-            }
-            //爆破附魔
-            if(EnchantmentHelper.getLevel(EnchantseriesClient.EXPLOSIVE_ENCHANTMENT, mainHandStack) > 0){
-                int level = EnchantmentHelper.getLevel(EnchantseriesClient.EXPLOSIVE_ENCHANTMENT, mainHandStack);
-                float explosionPower = 3.0F * level;
-                this.getWorld().createExplosion(owner, entity.getX()+0.5, entity.getY(), entity.getZ()+0.5, explosionPower,false, World.ExplosionSourceType.BLOCK);
+                //爆破附魔
+                if(EnchantmentHelper.getLevel(EnchantseriesClient.EXPLOSIVE_ENCHANTMENT, mainHandStack) > 0){
+                    int level = EnchantmentHelper.getLevel(EnchantseriesClient.EXPLOSIVE_ENCHANTMENT, mainHandStack);
+                    float explosionPower = 3.0F * level;
+                    this.getWorld().createExplosion(owner, entity.getX()+0.5, entity.getY(), entity.getZ()+0.5, explosionPower,false, World.ExplosionSourceType.BLOCK);
 //                    // 生成雷电
 //                    LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(this.getWorld());
 //                    if (lightningEntity != null) {
 //                        lightningEntity.refreshPositionAndAngles(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0.0F, 0.0F);
 //                        this.getWorld().spawnEntity(lightningEntity);
 //                    }
-                this.discard();
-            }
-            //箭雨
-            if(EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, mainHandStack) > 0){
-                ArrowsRainEnchantment.shootArrowRain(blockHitResult,EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, mainHandStack),player);
+                    this.discard();
+                }
+                //箭雨
+                if(EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, mainHandStack) > 0){
+                    ArrowsRainEnchantment.shootArrowRain(blockHitResult,EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, mainHandStack),player);
+                }
             }
         }
     }
@@ -128,15 +130,17 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
         Entity owner = entity.getOwner();
         if(owner instanceof LivingEntity player){
             ItemStack mainHandStack = player.getMainHandStack();
-            //爆破附魔
-            if(EnchantmentHelper.getLevel(EnchantseriesClient.EXPLOSIVE_ENCHANTMENT, mainHandStack) > 0){
-                int level = EnchantmentHelper.getLevel(EnchantseriesClient.EXPLOSIVE_ENCHANTMENT, mainHandStack);
-                float explosionPower = 3.0F * level;
-                this.getWorld().createExplosion(owner, entity.getX()+0.5, entity.getY(), entity.getZ()+0.5, explosionPower,false, World.ExplosionSourceType.BLOCK);
-            }
-            //箭雨
-            if(EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, mainHandStack) > 0){
-                ArrowsRainEnchantment.shootArrowRain(entityHitResult,EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, mainHandStack),player);
+            if(!player.getWorld().isClient){
+                //爆破附魔
+                if(EnchantmentHelper.getLevel(EnchantseriesClient.EXPLOSIVE_ENCHANTMENT, mainHandStack) > 0){
+                    int level = EnchantmentHelper.getLevel(EnchantseriesClient.EXPLOSIVE_ENCHANTMENT, mainHandStack);
+                    float explosionPower = 3.0F * level;
+                    this.getWorld().createExplosion(owner, entity.getX()+0.5, entity.getY(), entity.getZ()+0.5, explosionPower,false, World.ExplosionSourceType.BLOCK);
+                }
+                //箭雨
+                if(EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, mainHandStack) > 0){
+                    ArrowsRainEnchantment.shootArrowRain(entityHitResult,EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, mainHandStack),player);
+                }
             }
         }
     }
