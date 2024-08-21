@@ -1,6 +1,7 @@
 package com.soybean.mixin.client;
 
 import com.soybean.EnchantseriesClient;
+import com.soybean.enchantment.ArrowsRainEnchantment;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.client.MinecraftClient;
@@ -74,6 +75,10 @@ public abstract class BowItemMixin {
                 });
                 listenerRegistered = true;
             }
+        }
+        //箭雨
+        if(EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, user.getMainHandStack()) > 0){
+            ArrowsRainEnchantment.isPlayerArrow = true;
         }
     }
 
