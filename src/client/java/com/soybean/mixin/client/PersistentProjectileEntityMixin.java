@@ -16,11 +16,14 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -52,9 +55,7 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
 
     private boolean isFireArrowRain = false;
     private HitResult saveHitResult;
-
-    private boolean freezeArrowIsTouchWater = false;
-    private Vec3d freezeArrowPos = null;
+    private boolean hasTriggeredFreeze = false;
     public PersistentProjectileEntityMixin(EntityType<?> type, World world) {
         super(type, world);
     }
@@ -102,31 +103,10 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
                     }
                 }
                 //冻结
-                if(EnchantmentHelper.getLevel(EnchantseriesClient.ARROW_FREEZE_ENCHANTMENT, bowStack) > 0){
-                    if(projectile.isInFluid()){
-                        BlockState blockState = Blocks.ICE.getDefaultState();
-                        int level = EnchantmentHelper.getLevel(EnchantseriesClient.FLAME_PLACE_ENCHANTMENT, bowStack);
-                        int i = Math.min(18, 2 + level*2);
-                        if(freezeArrowPos == null){
-                            freezeArrowPos = projectile.getPos();
-                        }
-                        BlockPos blockPos = new BlockPos((int) freezeArrowPos.x, (int) freezeArrowPos.y, (int) freezeArrowPos.z);
-                        BlockPos.Mutable mutable = new BlockPos.Mutable();
-                        Iterator var7 = BlockPos.iterate(blockPos.add(-i, 0, -i), blockPos.add(i, 2, i)).iterator();
-                        while (var7.hasNext()) {
-                            BlockPos blockPos2 = (BlockPos) var7.next();
-                            if (blockPos2.isWithinDistance(freezeArrowPos, (double) i)) {
-                                mutable.set(blockPos2.getX(), blockPos2.getY() + 1, blockPos2.getZ());
-                                BlockState blockState2 = world.getBlockState(mutable);
-                                if (blockState2.isAir()) {
-                                    BlockState blockState3 = world.getBlockState(blockPos2);
-                                    if (blockState3 == Blocks.WATER.getDefaultState() && blockState.canPlaceAt(world, blockPos2) && world.canPlace(blockState, blockPos2, ShapeContext.absent())) {
-                                        world.setBlockState(blockPos2, blockState);
-                                    }
-                                }
-                            }
-                        }
-//                        this.discard();
+                if (EnchantmentHelper.getLevel(EnchantseriesClient.ARROW_FREEZE_ENCHANTMENT, bowStack) > 0) {
+                    if (projectile.isSubmergedInWater() && !hasTriggeredFreeze) {
+                        freezeWaterAroundArrow(projectile, world, bowStack);
+                        hasTriggeredFreeze = true;
                     }
                 }
             }
@@ -206,6 +186,12 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
                             }
                         }
                     }
+                    ((ServerWorld)world).spawnParticles(ParticleTypes.FLAME,
+                            entity.getX(), entity.getY(), entity.getZ(),
+                            50,
+                            i, i, i,
+                            0.1
+                    );
                     this.discard();
                 }
             }
@@ -232,5 +218,32 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
                 }
             }
         }
+    }
+
+    private void freezeWaterAroundArrow(PersistentProjectileEntity projectile, World world, ItemStack bowStack) {
+        BlockPos arrowPos = projectile.getBlockPos();
+        int enchantmentLevel = EnchantmentHelper.getLevel(EnchantseriesClient.ARROW_FREEZE_ENCHANTMENT, bowStack);
+        int freezeRadius = 2 + enchantmentLevel;  // Adjust base radius as needed
+
+        BlockState iceState = Blocks.ICE.getDefaultState();
+
+        for (BlockPos pos : BlockPos.iterate(
+                arrowPos.add(-freezeRadius, -freezeRadius, -freezeRadius),
+                arrowPos.add(freezeRadius, freezeRadius, freezeRadius))) {
+            if (pos.isWithinDistance(arrowPos, freezeRadius)) {
+                BlockState state = world.getBlockState(pos);
+                if (state.getFluidState().isOf(Fluids.WATER)) {
+                    world.setBlockState(pos, iceState);
+                }
+            }
+        }
+
+        ((ServerWorld)world).spawnParticles(ParticleTypes.SNOWFLAKE,
+                arrowPos.getX(), arrowPos.getY(), arrowPos.getZ(),
+                50,
+                freezeRadius, freezeRadius, freezeRadius,
+                0.1
+        );
+        this.discard();
     }
 }
