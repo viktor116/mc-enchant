@@ -93,13 +93,13 @@ public class EventInit {
                 //海绵行者
                 if(EnchantmentHelper.getLevel(EnchantseriesClient.SPONGE_WALKER_ENCHANTMENT,boots)>0){
                     if(player.isTouchingWater()){
-                        SpongeWalkerEnchantment.updateWater(player.getWorld(),player.getBlockPos());
+                        SpongeWalkerEnchantment.updateWater(player.getWorld(),player.getBlockPos(),EnchantmentHelper.getLevel(EnchantseriesClient.SPONGE_WALKER_ENCHANTMENT,boots));
                     }
                 }
                 //熔绵行者
                 if(EnchantmentHelper.getLevel(EnchantseriesClient.LAVA_SPONGE_WALKER_ENCHANTMENT,boots)>0){
                     if(player.isInLava()){
-                        LavaSpongeWalkerEnchantment.updateLava(player.getWorld(),player.getBlockPos());
+                        LavaSpongeWalkerEnchantment.updateLava(player.getWorld(),player.getBlockPos(),EnchantmentHelper.getLevel(EnchantseriesClient.LAVA_SPONGE_WALKER_ENCHANTMENT,boots));
                     }
                 }
             }

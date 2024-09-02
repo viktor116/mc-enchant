@@ -46,7 +46,7 @@ public class ArrowsRainEnchantment extends Enchantment {
 
     public static void shootArrowRain(HitResult hitResult, int level, Entity entity, ArrowEntity arrowEntity) {
         float f = 1.0F;
-        double radius = Math.min(3, level);
+        double radius = Math.max(3, 3 + level / 100);
         Vec3d pos = hitResult.getPos();
 //        ItemStack stack = new ItemStack(Items.ARROW);
         World world = entity.getWorld();

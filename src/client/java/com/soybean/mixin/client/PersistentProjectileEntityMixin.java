@@ -91,7 +91,7 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
                 //箭雨
                 if(EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, bowStack) > 0){
                     if(isFireArrowRain){
-                        Integer maxNum = Math.min(EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, bowStack)+7 , 16);
+                        Integer maxNum = EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, bowStack)+7;
                         if(ArrowsRainEnchantment.isPlayerArrow) ArrowsRainEnchantment.isPlayerArrow = false;
                         if(arrowsRainNum < maxNum){
                             ArrowsRainEnchantment.shootArrowRain(saveHitResult,EnchantmentHelper.getLevel(EnchantseriesClient.ARROWS_RAIN_ENCHANTMENT, bowStack),player,arrowEntity);

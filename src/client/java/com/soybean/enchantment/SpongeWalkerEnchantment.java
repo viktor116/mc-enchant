@@ -18,6 +18,8 @@ import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.logging.Level;
+
 /**
  * @author soybean
  * @date 2024/8/19 11:12
@@ -33,17 +35,17 @@ public class SpongeWalkerEnchantment extends Enchantment {
     }
 
     public int getMaxLevel() {
-        return 1;
+        return 8;
     }
 
-    public static void updateWater(World world, BlockPos pos) {
-        if (absorbWater(world, pos)) {
+    public static void updateWater(World world, BlockPos pos,int level) {
+        if (absorbWater(world, pos,level)) {
             world.playSound((PlayerEntity)null, pos, SoundEvents.BLOCK_SPONGE_ABSORB, SoundCategory.BLOCKS, 1.0F, 1.0F);
         }
     }
 
-    private static boolean absorbWater(World world, BlockPos pos) {
-        return BlockPos.iterateRecursively(pos, 6, 65, (currentPos, queuer) -> {
+    private static boolean absorbWater(World world, BlockPos pos, int level) {
+        return BlockPos.iterateRecursively(pos, 6 * (level /2), 65 * level * 10, (currentPos, queuer) -> {
             Direction[] var2 = DIRECTIONS;
             int var3 = var2.length;
 

@@ -16,6 +16,8 @@ import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.logging.Level;
+
 /**
  * @author soybean
  * @date 2024/8/19 11:44
@@ -33,14 +35,14 @@ public class LavaSpongeWalkerEnchantment extends Enchantment{
         return 1;
     }
 
-    public static void updateLava(World world, BlockPos pos) {
-        if (absorbLava(world, pos)) {
+    public static void updateLava(World world, BlockPos pos,int level) {
+        if (absorbLava(world, pos, level)) {
             world.playSound((PlayerEntity)null, pos, SoundEvents.BLOCK_SPONGE_ABSORB, SoundCategory.BLOCKS, 1.0F, 1.0F);
         }
     }
 
-    private static boolean absorbLava(World world, BlockPos pos) {
-        return BlockPos.iterateRecursively(pos, 6, 65, (currentPos, queuer) -> {
+    private static boolean absorbLava(World world, BlockPos pos,int level) {
+        return BlockPos.iterateRecursively(pos, 6 * (level /2), 65 * level * 10, (currentPos, queuer) -> {
             Direction[] var2 = DIRECTIONS;
             int var3 = var2.length;
 
