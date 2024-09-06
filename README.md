@@ -29,7 +29,7 @@
 ## 安装说明
 下载最新版本的模组文件（.jar）。
 将模组文件放入Minecraft的mods文件夹中。
-启动Minecraft并确保已安装相应的模组加载器（如Forge或Fabric）。
+启动Minecraft并确保已安装相应的模组加载器（Fabric）。
 在游戏中体验新的附魔效果！
 
 ## 注意事项
