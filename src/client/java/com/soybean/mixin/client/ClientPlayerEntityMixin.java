@@ -1,6 +1,6 @@
 package com.soybean.mixin.client;
 
-import com.soybean.EnchantseriesClient;
+import com.soybean.Enchantseries;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -32,7 +32,7 @@ public class ClientPlayerEntityMixin {
     @Inject(method = "sendMovementPackets", at = @At("TAIL"))
     private void onSendMovementPackets(CallbackInfo ci) {
         if (wantsToDoubleJump) {
-            ClientPlayNetworking.send(new Identifier(EnchantseriesClient.MID, "double_jump"), PacketByteBufs.empty());
+            ClientPlayNetworking.send(new Identifier(Enchantseries.MID, "double_jump"), PacketByteBufs.empty());
             wantsToDoubleJump = false;
         }
     }

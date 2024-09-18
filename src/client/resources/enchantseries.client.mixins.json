@@ -4,21 +4,7 @@
 	"compatibilityLevel": "JAVA_17",
 	"client": [
 		"ExampleClientMixin",
-      	"PlayerEntityMixin",
-		"EntityMixin",
-		"EnderPearlEntityMixin",
-		"FlintAndSteelItemMixin",
-		"FrostWalkerEnchantmentMixin",
-		"LivingEntityMixin",
-		"BoatEntityMixin",
-		"ItemEntityMixin",
-		"PersistentProjectileEntityMixin",
-		"BlockMixin",
-		"ClientPlayerEntityMixin",
-		"BowItemMixin",
-		"CrossbowItemMixin",
-		"AbstractSkeletonEntityMixin",
-		"MagmaBlockMixin"
+		"ClientPlayerEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -3,7 +3,21 @@
 	"package": "com.soybean.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"ExampleMixin"
+		"ExampleMixin",
+		"PlayerEntityMixin",
+		"EntityMixin",
+		"EnderPearlEntityMixin",
+		"FlintAndSteelItemMixin",
+		"FrostWalkerEnchantmentMixin",
+		"LivingEntityMixin",
+		"BoatEntityMixin",
+		"ItemEntityMixin",
+		"PersistentProjectileEntityMixin",
+		"BlockMixin",
+		"BowItemMixin",
+		"CrossbowItemMixin",
+		"AbstractSkeletonEntityMixin",
+		"MagmaBlockMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

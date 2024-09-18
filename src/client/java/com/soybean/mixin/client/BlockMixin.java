@@ -1,6 +1,6 @@
 package com.soybean.mixin.client;
 
-import com.soybean.EnchantseriesClient;
+import com.soybean.Enchantseries;
 import net.minecraft.block.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,44 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class BlockMixin {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BlockMixin.class);
-    @Inject(method = "onPlaced", at = @At("HEAD"))
-    public void onPlaced(World world, BlockPos pos,BlockState state, LivingEntity placer, ItemStack itemStack, CallbackInfo ci) {
-        if (world.isClient) {
-            return;
-        }
-        if (placer != null) {
-            ItemStack mainHandStack = placer.getMainHandStack();
-            if (EnchantmentHelper.getLevel(EnchantseriesClient.GROWTH_SEEDLINGS_ENCHANTMENT, mainHandStack) > 0) {
-                Block block = state.getBlock();
-                if (block instanceof CropBlock cropBlock) {
-                    world.setBlockState(pos, cropBlock.withAge(cropBlock.getMaxAge()));
-                } else if (block instanceof SaplingBlock saplingBlock) {
-                    saplingBlock.grow((ServerWorld) world, world.random, pos, state.with(SaplingBlock.STAGE, 1));
-                }
-            }
-        }
-    }
 
-    @Inject(at = @At("HEAD"), method = "getSlipperiness", cancellable = true)
-    public void getSlipperiness(CallbackInfoReturnable<Float> callback) {
-        Block block = ((Block) (Object) this);
-        // 检查是否为岩浆块
-        if (block.getDefaultState().isOf(Blocks.MAGMA_BLOCK)) {
-            // 获取当前玩家实例
-            MinecraftClient client = MinecraftClient.getInstance();
-            PlayerEntity player = client.player;
 
-            // 如果当前玩家存在并且装备了附有 FlameFrostWalker 附魔的靴子
-            if (player != null && hasFlameFrostWalkerEnchantment(player)) {
-                // 设置岩浆块的滑动系数为冰块的滑动系数
-                callback.setReturnValue(0.98F); // 冰块滑动系数
-            }
-        }
-    }
 
-    // 检查玩家是否穿着附有 FlameFrostWalker 附魔的靴子
-    private boolean hasFlameFrostWalkerEnchantment(PlayerEntity player) {
-        ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
-        return EnchantmentHelper.getLevel(EnchantseriesClient.FLAME_FROST_WALKER_ENCHANTMENT, boots) > 0;
-    }
 }
