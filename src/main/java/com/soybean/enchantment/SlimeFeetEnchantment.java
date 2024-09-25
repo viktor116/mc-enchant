@@ -63,7 +63,6 @@ public class SlimeFeetEnchantment extends Enchantment {
 
         if (!player.isOnGround() && velocity.y < 0 && d > 0.1) {
             playerFallSpeeds.put(playerId, Math.min(velocity.y, playerFallSpeeds.getOrDefault(playerId, 0.0)));
-            LOGGER.info("play velocity.y: {}", velocity.y);
             return;
         }
 

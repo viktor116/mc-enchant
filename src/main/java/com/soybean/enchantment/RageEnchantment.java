@@ -93,8 +93,6 @@ public class RageEnchantment extends Enchantment{
 
                 // Remove any remaining speed effect
                 entity.removeStatusEffect(StatusEffects.SPEED);
-
-                LOGGER.info("Removed all RageEnchantment effects.");
             });
         }
     }

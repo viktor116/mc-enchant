@@ -57,10 +57,10 @@ public abstract class BlockMixin {
 
     @Inject(at = @At("HEAD"), method = "getSlipperiness", cancellable = true)
     public void getSlipperiness(CallbackInfoReturnable<Float> callback) {
-        LOGGER.info("now size="+ hasFlameFrostList.size());
-        if(hasFlameFrostList.size() > 0){
-            callback.setReturnValue(0.98F); // 冰块滑动系数
-        }
+//        LOGGER.info("now size="+ hasFlameFrostList.size());
+//        if(hasFlameFrostList.size() > 0){
+//            callback.setReturnValue(0.98F); // 冰块滑动系数
+//        }
 //        Block block = ((Block) (Object) this);
 //        // 检查是否为岩浆块
 //        if (block.getDefaultState().isOf(Blocks.MAGMA_BLOCK)) {

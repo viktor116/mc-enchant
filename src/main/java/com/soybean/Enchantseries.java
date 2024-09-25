@@ -72,7 +72,10 @@ public class Enchantseries implements ModInitializer {
 	public static final Enchantment ARROW_FREEZE_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "arrow_freeze"), new ArrowFreezeEnchantment());
 	public static final Enchantment ICE_FROST_KING_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "ice_frost_king"), new IceFrostKingEnchantment());
 	public static final Enchantment MIDAS_TOUCH_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "midas_touch"), new MidasTouchEnchantment());
-	public static final Enchantment ICE_BLUE_BODY_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "ice_blue_body"), new MidasTouchEnchantment());
+	public static final Enchantment ICE_BLUE_BODY_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "ice_blue_body"), new BlueIceBodyEnchantment());
+	public static final Enchantment REPRODUCTION_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "reproduction"), new ReproductionEnchantment());
+	public static final Enchantment DISSOLVE_WALKER_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "dissolve_walker"), new DissolveWalkerEnchantment());
+	public static final Enchantment SNOW_SWORD_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "snow_sword"), new SnowSwordEnchantment());
 	public static final ItemStack FIRE_SHOE_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(FIRE_SHOE, 1));
 	public static final ItemStack TO_FRIEND_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(TO_FRIEND_ENCHANTMENT, 1));
 	public static final ItemStack EXPLOSIVE_COIN_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(EXPLOSIVE_COIN, 1));
@@ -113,6 +116,9 @@ public class Enchantseries implements ModInitializer {
 	public static final ItemStack ICE_FROST_KING_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(ICE_FROST_KING_ENCHANTMENT, 1));
 	public static final ItemStack MIDAS_TOUCH_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(MIDAS_TOUCH_ENCHANTMENT, 1));
 	public static final ItemStack ICE_BLUE_BODY_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(ICE_BLUE_BODY_ENCHANTMENT, 1));
+	public static final ItemStack REPRODUCTION_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(REPRODUCTION_ENCHANTMENT, 1));
+	public static final ItemStack DISSOLVE_WALKER_ENCHANTMENT_BOOK =  EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(DISSOLVE_WALKER_ENCHANTMENT, 1));
+	public static final ItemStack SNOW_SWORD_ENCHANTMENT_BOOK =  EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(SNOW_SWORD_ENCHANTMENT, 1));
 
 	public static final AmaterasuFireBlock fire = Registry.register(Registries.BLOCK, new Identifier(MID, "amaterasu"), new AmaterasuFireBlock(AbstractBlock.Settings.create().replaceable().mapColor(MapColor.BLACK).noCollision().breakInstantly().luminance((state) -> {
 		return 10;
@@ -162,6 +168,9 @@ public class Enchantseries implements ModInitializer {
 				entries.add(ICE_FROST_KING_ENCHANTMENT_BOOK);
 				entries.add(MIDAS_TOUCH_ENCHANTMENT_BOOK);
 				entries.add(ICE_BLUE_BODY_ENCHANTMENT_BOOK);
+				entries.add(REPRODUCTION_ENCHANTMENT_BOOK);
+				entries.add(DISSOLVE_WALKER_ENCHANTMENT_BOOK);
+				entries.add(SNOW_SWORD_ENCHANTMENT_BOOK);
 			})
 			.build();
 

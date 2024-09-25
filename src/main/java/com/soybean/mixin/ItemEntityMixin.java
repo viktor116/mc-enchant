@@ -22,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityMixin {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemEntityMixin.class);
+    private static final String FENG_DAN = "enchantseries:feng_dan";
     @Shadow public abstract void setDespawnImmediately();
 
     //    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/SheepEntity;sheared(Lnet/minecraft/sound/SoundCategory;)V"), method = "interactMob", cancellable = true)
@@ -38,17 +39,29 @@ public abstract class ItemEntityMixin {
             NbtCompound enchantmentTag = enchantmentsList.getCompound(i);
             id = enchantmentTag.getString("id");// 获取附魔 ID
             level = enchantmentTag.getInt("lvl");// 获取附魔等级
-        }
-        if(level != 0 && id.equals("enchantseries:feng_dan")){
-            this.setDespawnImmediately();
+            if(level != 0 && id.equals(FENG_DAN)){
+                this.setDespawnImmediately();
+            }
         }
     }
 
     @Inject(at = @At(value = "HEAD"), method = "tick", cancellable = false)
     public void tick(CallbackInfo ci) {
         ItemEntity entity = (ItemEntity)(Object) this;
-        if(entity.getWorld().isRaining() && entity.getWorld().isSkyVisible(entity.getBlockPos())){
-            this.setDespawnImmediately();
+        NbtCompound nbtCompound = new NbtCompound();
+        entity.saveNbt(nbtCompound);
+        NbtCompound itemTag = nbtCompound.getCompound("Item").getCompound("tag");
+        NbtList enchantmentsList = itemTag.getList("Enchantments", NbtElement.COMPOUND_TYPE);
+        String id = "";
+        int level = 0;
+        for (int i = 0; i < enchantmentsList.size(); i++) {
+            NbtCompound enchantmentTag = enchantmentsList.getCompound(i);
+            id = enchantmentTag.getString("id");// 获取附魔 ID
+            level = enchantmentTag.getInt("lvl");// 获取附魔等级
+            if(entity.getWorld().isRaining() && entity.getWorld().isSkyVisible(entity.getBlockPos()) && level != 0 && id.equals(FENG_DAN)){
+                this.setDespawnImmediately();
+            }
         }
+
     }
 }

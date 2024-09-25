@@ -43,7 +43,6 @@ public class WaterWalker extends Enchantment {
         BlockState blockState = Blocks.WATER.getDefaultState();
         int i = Math.min(16, 2 + level);
         BlockPos.Mutable mutable = new BlockPos.Mutable();
-        LOGGER.info("velocity = {}",entity.getVelocity().y);
         if(entity.getVelocity().y < -0.1){
             Vec3d posEntity = entity.getPos();
             BlockPos blockPos1 = new BlockPos((int)posEntity.getX(), (int)posEntity.getY(), (int)posEntity.getZ());

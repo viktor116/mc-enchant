@@ -54,7 +54,6 @@ public class SpiderPowerEnchantment extends Enchantment {
             player.fallDistance = 0;
             player.setVelocity(player.getVelocity().x, 0.5, player.getVelocity().z);
             player.velocityModified= true; // 确保速度更新
-            LOGGER.info("Player is climbing the wall...");
         }
     }
 

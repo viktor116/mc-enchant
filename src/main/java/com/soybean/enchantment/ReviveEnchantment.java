@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  * @description 复苏 完成
  */
 public class ReviveEnchantment extends Enchantment {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ToFriendEnchantment.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReviveEnchantment.class);
 
     public ReviveEnchantment() {
         super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[]{EquipmentSlot.MAINHAND});

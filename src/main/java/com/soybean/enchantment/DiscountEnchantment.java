@@ -71,7 +71,6 @@ public class DiscountEnchantment extends Enchantment {
                 offer.getOriginalFirstBuyItem().setCount(newPrice);
             }
             if(type == 1){ //重置机会次数
-                LOGGER.info("start reset uses");
                 offer.resetUses();
             }
         }

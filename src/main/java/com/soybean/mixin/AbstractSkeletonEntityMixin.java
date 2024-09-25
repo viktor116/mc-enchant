@@ -47,7 +47,6 @@ public class AbstractSkeletonEntityMixin {
                         tickCounter--;
                         if(remainNum > 0 && tickCounter ==0){
                             shoot(entity,pullProgress);
-                            LOGGER.info("shoot");
                             remainNum--;
                             tickCounter = 5;
                         }
