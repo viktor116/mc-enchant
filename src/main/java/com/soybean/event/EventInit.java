@@ -1,7 +1,6 @@
 package com.soybean.event;
 
 import com.soybean.Enchantseries;
-import com.soybean.Enchantseries;
 import com.soybean.Interface.RambleInterface;
 import com.soybean.damage.FengdanDamage;
 import com.soybean.enchantment.*;
@@ -12,18 +11,26 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.spawner.MobSpawnerEntry;
+import net.minecraft.block.ExperienceDroppingBlock;
+import net.minecraft.block.RedstoneOreBlock;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ExperienceOrbEntity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameterSet;
+import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,6 +131,14 @@ public class EventInit {
                 if (dissolveLevel > 0) {
                     DissolveWalkerEnchantment.dissolveBlock(player,player.getWorld(), player.getBlockPos(), dissolveLevel);
                 }
+                //望雷
+                if(player.isUsingSpyglass() && (EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_LIGHTNING_ENCHANTMENT,player.getMainHandStack()) > 0 || EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_LIGHTNING_ENCHANTMENT,player.getOffHandStack()) > 0)){
+                    SpyglassLightningEnchantment.Instance.lookLightning(player,EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_LIGHTNING_ENCHANTMENT,player.getMainHandStack())+EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_LIGHTNING_ENCHANTMENT,player.getOffHandStack()));
+                }
+                //远视拆毁
+                if(player.isUsingSpyglass() && (EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_DESTRUCT_ENCHANTMENT,player.getMainHandStack()) > 0 || EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_DESTRUCT_ENCHANTMENT,player.getOffHandStack()) > 0 )){
+                    SpyglassDestructEnchantment.Instance.lookDestruct(player,EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_DESTRUCT_ENCHANTMENT,player.getMainHandStack()) + EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_DESTRUCT_ENCHANTMENT,player.getOffHandStack()));
+                }
             }
         });
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
@@ -209,5 +224,47 @@ public class EventInit {
             }
             return ActionResult.PASS;
         });
+
+        PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, blockEntity) -> {
+            if (!player.isSpectator() && !world.isClient) {
+                ServerWorld serverWorld = (ServerWorld) world;
+
+                // 阻止正常的方块破坏行为
+                world.setBlockState(pos, net.minecraft.block.Blocks.AIR.getDefaultState(), 35);
+
+                // 手动处理经验掉落
+                LootContextParameterSet.Builder paramBuilder = new LootContextParameterSet.Builder(serverWorld)
+                        .add(LootContextParameters.ORIGIN, Vec3d.ofCenter(pos))
+                        .add(LootContextParameters.TOOL, player.getMainHandStack())
+                        .add(LootContextParameters.THIS_ENTITY, player)
+                        .add(LootContextParameters.BLOCK_STATE, state);
+
+//                if (blockEntity != null) {
+//                    paramBuilder.add(LootContextParameters.BLOCK_ENTITY, blockEntity);
+//                }
+//
+//                LootContextParameterSet params = paramBuilder.build();
+//                LootContext.Builder builder = new LootContext.Builder(params);
+
+                // 获取但不生成掉落物
+                List<ItemStack> drops = state.getDroppedStacks(paramBuilder);
+
+                return false; // 阻止默认的方块破坏行为
+            }
+            return true; // 在客户端或旁观者模式下允许默认行为
+        });
+
+//        PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
+//            if (!player.isSpectator() && !world.isClient) {
+//                LOGGER.info("start drop block");
+//                ServerWorld serverWorld = (ServerWorld) world;
+//                // 移除原始掉落物
+//                List<ItemEntity> droppedItems = world.getEntitiesByClass(ItemEntity.class, new Box(pos),
+//                        entity -> entity.getItemAge() == 0 && entity.squaredDistanceTo(Vec3d.ofCenter(pos)) <= 0.5);
+//                droppedItems.forEach(Entity::discard);
+//                int expToDrop = 10; // 示例：每个方块掉落1点经验
+//                ExperienceOrbEntity.spawn(serverWorld, Vec3d.ofCenter(pos), expToDrop);
+//            }
+//        });
     }
 }

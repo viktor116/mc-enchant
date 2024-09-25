@@ -43,5 +43,8 @@
   "enchantment.enchantseries.reproduction": "繁殖",
   "enchantment.enchantseries.dissolve_walker": "溶解",
   "enchantment.enchantseries.snow_sword":"雪刃",
+  "enchantment.enchantseries.spyglass_lightning": "望雷",
+  "enchantment.enchantseries.spyglass_destruct": "远视拆毁",
+  "enchantment.enchantseries.experience_exchange": "经验挖掘",
   "death.attack.fengdanDamage": "%1$s 溶于水中"
 }

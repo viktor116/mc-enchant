@@ -43,5 +43,8 @@
   "enchantment.enchantseries.reproduction": "reproduction",
   "enchantment.enchantseries.dissolve_walker": "dissolve",
   "enchantment.enchantseries.snow_sword":"snowed",
+  "enchantment.enchantseries.spyglass_lightning": "spyglass lightning",
+  "enchantment.enchantseries.spyglass_destruct": "long range destruction",
+  "enchantment.enchantseries.experience_exchange": "experience digging",
   "death.attack.fengdanDamage": "%1$s dissolved in water"
 }

@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -128,6 +129,7 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
 //                world.breakBlock(blockPos,true,player);
                     if (player instanceof ServerPlayerEntity serverPlayer) {
                         serverPlayer.interactionManager.tryBreakBlock(blockPos);
+                        // 生成掉落物
                     }
                     this.discard();
                 }
