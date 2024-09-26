@@ -48,7 +48,7 @@ public class SpyglassLightningEnchantment extends Enchantment {
     }
 
     public void lookLightning(PlayerEntity player,int level){
-        BlockHitResult hitResult = (BlockHitResult) player.raycast(120.0D, 0.0F, false);
+        BlockHitResult hitResult = (BlockHitResult) player.raycast(300.0D, 0.0F, true);
         BlockPos blockPos = hitResult.getBlockPos();
         World world = player.getWorld();
         int i = level - 1;

@@ -50,6 +50,4 @@ public class BlueIceBodyEnchantment extends Enchantment{
             }
         }
     }
-
-
 }

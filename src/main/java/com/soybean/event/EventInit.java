@@ -49,8 +49,6 @@ public class EventInit {
 
     private static final Random random = new Random();
 
-    public static Map<String, Integer> canShootMap = new HashMap<>();
-
     public static void start() {
         EVENT.register((listener) -> {
             List<? extends PlayerEntity> players = listener.getPlayers();
@@ -59,6 +57,11 @@ public class EventInit {
                 ItemStack leg = player.getInventory().getArmorStack(1);
                 ItemStack chest = player.getInventory().getArmorStack(2);
                 ItemStack head = player.getInventory().getArmorStack(3);
+                //水之女神
+                int waterGoddessLevel = CommonUtils.getEnchantTotalLevel(player, Enchantseries.WATER_GODDESS_ENCHANTMENT);
+                if(waterGoddessLevel > 0 ){
+                    WaterGoddessEnchantment.Instance.BlockToWater(player, player.getWorld(), player.getBlockPos(), waterGoddessLevel);
+                }
                 // 蓝冰圣体
                 int blueIceBodyLevel = CommonUtils.getEnchantTotalLevel(player, Enchantseries.ICE_BLUE_BODY_ENCHANTMENT);
                 if (blueIceBodyLevel > 0) {
@@ -139,6 +142,10 @@ public class EventInit {
                 if(player.isUsingSpyglass() && (EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_DESTRUCT_ENCHANTMENT,player.getMainHandStack()) > 0 || EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_DESTRUCT_ENCHANTMENT,player.getOffHandStack()) > 0 )){
                     SpyglassDestructEnchantment.Instance.lookDestruct(player,EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_DESTRUCT_ENCHANTMENT,player.getMainHandStack()) + EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_DESTRUCT_ENCHANTMENT,player.getOffHandStack()));
                 }
+                //望破
+                if(player.isUsingSpyglass() && (EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_EXPLOSIVE_ENCHANTMENT,player.getMainHandStack()) > 0 || EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_EXPLOSIVE_ENCHANTMENT,player.getOffHandStack()) > 0 )){
+                    SpyglassExplosiveEnchantment.Instance.productExplosive(player,EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_EXPLOSIVE_ENCHANTMENT,player.getMainHandStack()) + EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_EXPLOSIVE_ENCHANTMENT,player.getOffHandStack()));
+                }
             }
         });
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
@@ -197,6 +204,11 @@ public class EventInit {
         FlameFrostWalkerEnchantment.registerEvents();
         //点石成金
         MidasTouchEnchantment.registerListener();
+        //梦想成真
+        WishEnchantment.Instance.registerListener();
+        //水之女神
+        WaterGoddessEnchantment.Instance.registerListener();
+
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
             if (!world.isClient) {
                 //攻击实体 回调繁殖
@@ -227,44 +239,13 @@ public class EventInit {
 
         PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, blockEntity) -> {
             if (!player.isSpectator() && !world.isClient) {
-                ServerWorld serverWorld = (ServerWorld) world;
-
-                // 阻止正常的方块破坏行为
-                world.setBlockState(pos, net.minecraft.block.Blocks.AIR.getDefaultState(), 35);
-
-                // 手动处理经验掉落
-                LootContextParameterSet.Builder paramBuilder = new LootContextParameterSet.Builder(serverWorld)
-                        .add(LootContextParameters.ORIGIN, Vec3d.ofCenter(pos))
-                        .add(LootContextParameters.TOOL, player.getMainHandStack())
-                        .add(LootContextParameters.THIS_ENTITY, player)
-                        .add(LootContextParameters.BLOCK_STATE, state);
-
-//                if (blockEntity != null) {
-//                    paramBuilder.add(LootContextParameters.BLOCK_ENTITY, blockEntity);
-//                }
-//
-//                LootContextParameterSet params = paramBuilder.build();
-//                LootContext.Builder builder = new LootContext.Builder(params);
-
-                // 获取但不生成掉落物
-                List<ItemStack> drops = state.getDroppedStacks(paramBuilder);
-
-                return false; // 阻止默认的方块破坏行为
+                //经验交换
+                if(EnchantmentHelper.getLevel(Enchantseries.EXPERIENCE_EXCHANGE_ENCHANTMENT, player.getMainHandStack()) > 0){
+                    ExperienceExchangeEnchantment.Instance.cancelDropToExperience(world, player, pos , EnchantmentHelper.getLevel(Enchantseries.EXPERIENCE_EXCHANGE_ENCHANTMENT, player.getMainHandStack()));
+                    return false; // 阻止默认的方块破坏行为
+                }
             }
-            return true; // 在客户端或旁观者模式下允许默认行为
+            return true;
         });
-
-//        PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
-//            if (!player.isSpectator() && !world.isClient) {
-//                LOGGER.info("start drop block");
-//                ServerWorld serverWorld = (ServerWorld) world;
-//                // 移除原始掉落物
-//                List<ItemEntity> droppedItems = world.getEntitiesByClass(ItemEntity.class, new Box(pos),
-//                        entity -> entity.getItemAge() == 0 && entity.squaredDistanceTo(Vec3d.ofCenter(pos)) <= 0.5);
-//                droppedItems.forEach(Entity::discard);
-//                int expToDrop = 10; // 示例：每个方块掉落1点经验
-//                ExperienceOrbEntity.spawn(serverWorld, Vec3d.ofCenter(pos), expToDrop);
-//            }
-//        });
     }
 }
