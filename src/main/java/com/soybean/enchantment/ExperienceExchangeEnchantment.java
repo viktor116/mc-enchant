@@ -40,10 +40,16 @@ public class ExperienceExchangeEnchantment extends Enchantment {
         ServerWorld serverWorld = (ServerWorld) world;
         // 阻止正常的方块破坏行为
         world.setBlockState(targetBlockPos, net.minecraft.block.Blocks.AIR.getDefaultState(), 35);
-
         int expToDrop = 10; // 示例：每个方块掉落1点经验
         for (int i = 0; i < level; i++) {
             ExperienceOrbEntity.spawn(serverWorld, Vec3d.ofCenter(targetBlockPos), expToDrop);
+        }
+        //待验证
+        ItemStack mainHand = player.getMainHandStack();
+        if(mainHand.isDamageable()){
+            mainHand.damage(1, player, (p) -> {
+                p.sendToolBreakStatus(player.preferredHand);  // 处理工具破损
+            });
         }
     }
 
