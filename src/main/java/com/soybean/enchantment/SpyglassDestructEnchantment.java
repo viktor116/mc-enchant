@@ -73,5 +73,4 @@ public class SpyglassDestructEnchantment extends Enchantment {
             }
         }
     }
-
 }

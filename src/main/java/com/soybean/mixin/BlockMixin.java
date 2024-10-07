@@ -55,27 +55,6 @@ public abstract class BlockMixin {
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "getSlipperiness", cancellable = true)
-    public void getSlipperiness(CallbackInfoReturnable<Float> callback) {
-//        LOGGER.info("now size="+ hasFlameFrostList.size());
-//        if(hasFlameFrostList.size() > 0){
-//            callback.setReturnValue(0.98F); // 冰块滑动系数
-//        }
-//        Block block = ((Block) (Object) this);
-//        // 检查是否为岩浆块
-//        if (block.getDefaultState().isOf(Blocks.MAGMA_BLOCK)) {
-//
-//            MinecraftClient client = MinecraftClient.getInstance();
-//            PlayerEntity player = client.player;
-//
-//            // 如果当前玩家存在并且装备了附有 FlameFrostWalker 附魔的靴子
-//            if (player != null && hasFlameFrostWalkerEnchantment(player)) {
-//                // 设置岩浆块的滑动系数为冰块的滑动系数
-//                callback.setReturnValue(0.98F); // 冰块滑动系数
-//            }
-//        }
-    }
-
     @Inject(at = @At("HEAD"), method = "onSteppedOn", cancellable = true)
     public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity, CallbackInfo ci) {
         Block block = ((Block) (Object) this);

@@ -199,6 +199,6 @@ public class Enchantseries implements ModInitializer {
 		EventInit.start();
 		FengdanDamage.registerDamageType();
 
-		LOGGER.info("soybean enchantment series mod( •̀ ω •́ )✧!");
+		LOGGER.info("soybeani more enchantment series mod( •̀ ω •́ )✧!");
 	}
 }

@@ -115,7 +115,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                     EnchantmentHelper.getLevel(Enchantseries.AIR_SWIMMING_ENCHANTMENT, player.getInventory().getArmorStack(3)) > 0){
                 player.getWorld().spawnEntity(new ItemEntity(player.getWorld(), player.getX(), player.getY(), player.getZ(), new ItemStack(Items.TROPICAL_FISH)));
             }
-
         }
     }
 
@@ -149,7 +148,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         if (double_jump_level > 0) {
             handleDoubleJump(player, double_jump_level, this.isJump);
         }
-
 
     }
 
