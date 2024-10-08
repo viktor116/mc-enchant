@@ -18,7 +18,8 @@
 		"CrossbowItemMixin",
 		"AbstractSkeletonEntityMixin",
 		"MagmaBlockMixin",
-		"FishingBobberEntityMixin"
+		"FishingBobberEntityMixin",
+		"TridentItemMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

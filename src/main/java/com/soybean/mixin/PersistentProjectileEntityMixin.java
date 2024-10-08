@@ -2,6 +2,7 @@ package com.soybean.mixin;
 
 import com.soybean.Enchantseries;
 import com.soybean.enchantment.ArrowsRainEnchantment;
+import com.soybean.enchantment.GodPunishEnchantment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -13,6 +14,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -100,6 +102,12 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
                         freezeWaterAroundArrow(projectile, world, bowStack);
                         hasTriggeredFreeze = true;
                     }
+                }
+            }
+            if(projectile instanceof TridentEntity tridentEntity){
+                ItemStack tridentItem = tridentEntity.getItemStack();
+                if(EnchantmentHelper.getLevel(Enchantseries.GOD_PUNISH_ENCHANTMENT, tridentItem) > 0){
+                    GodPunishEnchantment.Instance.createLightNing(tridentEntity);
                 }
             }
         }

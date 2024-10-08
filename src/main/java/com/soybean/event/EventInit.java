@@ -9,6 +9,7 @@ import com.soybean.utils.CommonUtils;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ExperienceDroppingBlock;
@@ -27,6 +28,7 @@ import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -146,7 +148,18 @@ public class EventInit {
                 if(player.isUsingSpyglass() && (EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_EXPLOSIVE_ENCHANTMENT,player.getMainHandStack()) > 0 || EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_EXPLOSIVE_ENCHANTMENT,player.getOffHandStack()) > 0 )){
                     SpyglassExplosiveEnchantment.Instance.productExplosive(player,EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_EXPLOSIVE_ENCHANTMENT,player.getMainHandStack()) + EnchantmentHelper.getLevel(Enchantseries.SPYGLASS_EXPLOSIVE_ENCHANTMENT,player.getOffHandStack()));
                 }
+                //自爆
+                if(CommonUtils.getEnchantTotalLevel(player, Enchantseries.SELF_EXPLOSIVE_ENCHANTMENT) > 0){
+                    SelfExplosiveEnchantment.Instance.activeSelfExplosive(player,CommonUtils.getEnchantTotalLevel(player, Enchantseries.SELF_EXPLOSIVE_ENCHANTMENT));
+                }
             }
+        });
+        UseItemCallback.EVENT.register((player, world, hand) ->{
+            ItemStack mainHandStack = player.getMainHandStack();
+            if(EnchantmentHelper.getLevel(Enchantseries.SELF_EXPLOSIVE_ENCHANTMENT, mainHandStack) > 0){
+                SelfExplosiveEnchantment.Instance.activeSelfExplosive(player,EnchantmentHelper.getLevel(Enchantseries.SELF_EXPLOSIVE_ENCHANTMENT, mainHandStack));
+            }
+            return TypedActionResult.pass(ItemStack.EMPTY);
         });
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
             ExplosiveCoin.onDamaged(player, entity);

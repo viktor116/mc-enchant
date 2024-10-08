@@ -82,6 +82,8 @@ public class Enchantseries implements ModInitializer {
 	public static final Enchantment WISH_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "wish"), new WishEnchantment());
 	public static final Enchantment SPYGLASS_EXPLOSIVE_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "spyglass_explosive"), new SpyglassExplosiveEnchantment());
 	public static final Enchantment WATER_GODDESS_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "water_goddess"), new WaterGoddessEnchantment());
+	public static final Enchantment GOD_PUNISH_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "god_punish"), new GodPunishEnchantment());
+	public static final Enchantment SELF_EXPLOSIVE_ENCHANTMENT = Registry.register(Registries.ENCHANTMENT, new Identifier(MID, "self_explosive"), new SelfExplosiveEnchantment());
 	public static final ItemStack FIRE_SHOE_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(FIRE_SHOE, 1));
 	public static final ItemStack TO_FRIEND_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(TO_FRIEND_ENCHANTMENT, 1));
 	public static final ItemStack EXPLOSIVE_COIN_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(EXPLOSIVE_COIN, 1));
@@ -131,6 +133,8 @@ public class Enchantseries implements ModInitializer {
 	public static final ItemStack WISH_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(WISH_ENCHANTMENT, 1));
 	public static final ItemStack SPYGLASS_EXPLOSIVE_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(SPYGLASS_EXPLOSIVE_ENCHANTMENT, 1));
 	public static final ItemStack WATER_GODDESS_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(WATER_GODDESS_ENCHANTMENT, 1));
+	public static final ItemStack GOD_PUNISH_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(GOD_PUNISH_ENCHANTMENT, 1));
+	public static final ItemStack SELF_EXPLOSIVE_ENCHANTMENT_BOOK = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(SELF_EXPLOSIVE_ENCHANTMENT, 1));
 
 	public static final AmaterasuFireBlock fire = Registry.register(Registries.BLOCK, new Identifier(MID, "amaterasu"), new AmaterasuFireBlock(AbstractBlock.Settings.create().replaceable().mapColor(MapColor.BLACK).noCollision().breakInstantly().luminance((state) -> {
 		return 10;
@@ -189,6 +193,8 @@ public class Enchantseries implements ModInitializer {
 				entries.add(EXPERIENCE_EXCHANGE_ENCHANTMENT_BOOK);
 				entries.add(SPYGLASS_EXPLOSIVE_ENCHANTMENT_BOOK);
 				entries.add(WATER_GODDESS_ENCHANTMENT_BOOK);
+				entries.add(GOD_PUNISH_ENCHANTMENT_BOOK);
+				entries.add(SELF_EXPLOSIVE_ENCHANTMENT_BOOK);
 			})
 			.build();
 
