@@ -30,6 +30,9 @@ public class SelfExplosiveEnchantment extends Enchantment {
         return true;
     }
 
+    public boolean isCursed() {
+        return true;
+    }
     public int getMaxLevel() {
         return 8;
     }
